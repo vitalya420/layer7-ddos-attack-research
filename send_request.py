@@ -5,15 +5,15 @@ import time
 import dummy_json_generator
 
 
-HOST = "httpbin.org"
-ADDR = (socket.gethostbyname(HOST), 443)
+HOST = "localhost"
+ADDR = (socket.gethostbyname(HOST), 5000)
+print(ADDR)
 SSL_CONTEXT = ssl.create_default_context()
-DUMMY_DATA = dummy_json_generator.generate_large(1000, 100)
+DUMMY_DATA = dummy_json_generator.generate_large(50000, 500)
 
 
 def create_connection():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock = SSL_CONTEXT.wrap_socket(sock, server_hostname=HOST)
     sock.connect(ADDR)
     return sock
 
@@ -23,8 +23,7 @@ def craft_request():
     data = data.encode()
     content_len = len(data)
     request = (
-        "POST /post HTTP/1.1\r\n"
-        f"Host: {HOST}\r\n"
+        "POST /orjson HTTP/1.1\r\n"
         f"Content-Length: {content_len}\r\n"
         "Content-Type: application/json\r\n"
         "accept: application/json\r\n"
